@@ -1,6 +1,17 @@
 language: go
+
 go:
- - 1.2
  - tip
-install: go get -v ./teamweek
-script: go test -v ./teamweek
+
+install:
+  - go get code.google.com/p/go.tools/cmd/cover
+  - go get github.com/mattn/goveralls
+
+before_script:
+  - export PATH=$HOME/gopath/bin:$PATH
+
+script:
+  - go test -covermode=count -coverprofile=profile.cov ./teamweek
+
+after_success:
+  - goveralls -v -service=travis-ci
