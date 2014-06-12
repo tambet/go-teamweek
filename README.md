@@ -3,7 +3,7 @@ go-teamweek
 
 [Go](http://golang.org) library for accessing the [Teamweek API](https://github.com/Teamweek/teamweek/wiki)
 
-## Usage ##
+### Usage ###
 
 ```go
 import "github.com/tambet/go-teamweek/teamweek"
