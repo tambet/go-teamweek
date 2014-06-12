@@ -4,6 +4,7 @@ go-teamweek
 [Go](http://golang.org) library for accessing the [Teamweek API](https://github.com/Teamweek/teamweek/wiki)
 
 [![Build Status](https://travis-ci.org/tambet/go-teamweek.svg?branch=master)](https://travis-ci.org/tambet/go-teamweek)
+[![Coverage Status](https://coveralls.io/repos/tambet/go-teamweek/badge.png?branch=master)](https://coveralls.io/r/tambet/go-teamweek?branch=master)
 
 ### Usage ###
 
