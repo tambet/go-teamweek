@@ -1,5 +1,5 @@
 test: test-deps
-	go test teamweek
+	go test teamweek/
 
 cover: test-deps
 	@go test -coverprofile=cover.out teamweek

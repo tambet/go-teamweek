@@ -63,3 +63,23 @@ func TestListAccounts(t *testing.T) {
 		t.Errorf("ListAccounts returned %+v, want %+v", accounts, want)
 	}
 }
+
+func TestProfile(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/me.json", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, `{"id":1,"email":"test@teamweek.com"}`)
+	})
+
+	profile, err := client.Profile()
+	if err != nil {
+		t.Errorf("Profile returned error: %v", err)
+	}
+
+	want := &Profile{ID: 1, Email: "test@teamweek.com"}
+
+	if !reflect.DeepEqual(profile, want) {
+		t.Errorf("Profile returned %+v, want %+v", profile, want)
+	}
+}
