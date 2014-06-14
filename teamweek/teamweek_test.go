@@ -213,3 +213,26 @@ func TestListAccountTasks(t *testing.T) {
 		t.Errorf("ListAccountTasks returned %+v, want %+v", tasks, want)
 	}
 }
+
+func TestInvalidURL(t *testing.T) {
+	tasks := new([]Task)
+	client = NewClient(nil)
+	err := client.Request("/%s/tasks", tasks)
+	if err == nil {
+		t.Errorf("TestInvalidURL should get 'invalid URL escape' error")
+	}
+}
+
+func TestHandleHttpError(t *testing.T) {
+	setup()
+	defer teardown()
+	tasks := new([]Task)
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Bad Request", 400)
+	})
+	err := client.Request("/", tasks)
+	if err == nil {
+		t.Errorf("TestInvalidURL should get 'invalid URL escape' error")
+	}
+
+}
