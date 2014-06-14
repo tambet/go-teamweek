@@ -215,24 +215,47 @@ func TestListAccountTasks(t *testing.T) {
 }
 
 func TestInvalidURL(t *testing.T) {
-	tasks := new([]Task)
 	client = NewClient(nil)
-	err := client.Request("/%s/tasks", tasks)
+	err := client.Request("/%s/error", nil)
 	if err == nil {
-		t.Errorf("TestInvalidURL should get 'invalid URL escape' error")
+		t.Errorf("Expected 'invalid URL escape' error")
 	}
 }
 
 func TestHandleHttpError(t *testing.T) {
 	setup()
 	defer teardown()
-	tasks := new([]Task)
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad Request", 400)
 	})
-	err := client.Request("/", tasks)
+	err := client.Request("/", nil)
 	if err == nil {
-		t.Errorf("TestInvalidURL should get 'invalid URL escape' error")
+		t.Errorf("Expected 'Bad Request' error")
 	}
+}
 
+func TestInvalidNewRequest(t *testing.T) {
+	client = NewClient(nil)
+	client.BaseURL = &url.URL{Host: "%s"}
+	err := client.Request("/", nil)
+
+	if err == nil {
+		t.Error("Expected error to be returned.")
+	}
+	if err, ok := err.(*url.Error); !ok {
+		t.Errorf("Expected a URL error; got %#v.", err)
+	}
+}
+
+func TestHttpClientError(t *testing.T) {
+	client = NewClient(nil)
+	client.BaseURL = &url.URL{}
+	err := client.Request("/", nil)
+
+	if err == nil {
+		t.Error("Expected error to be returned.")
+	}
+	if err, ok := err.(*url.Error); !ok {
+		t.Errorf("Expected a URL error; got %#v.", err)
+	}
 }
