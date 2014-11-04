@@ -259,3 +259,42 @@ func TestHttpClientError(t *testing.T) {
 		t.Errorf("Expected a URL error; got %#v.", err)
 	}
 }
+
+func TestServiceInternalError(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Internal Server Error", 500)
+	})
+
+	if err := client.Request("/", nil); err == nil {
+		t.Errorf("Expected 'Internal Server Error'")
+	}
+}
+
+func TestUnauthorizedError(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Unauthorized", 401)
+	})
+
+	if err := client.Request("/", nil); err == nil {
+		t.Errorf("Expected 'Unauthorized'")
+	}
+}
+
+func TestUnexpectedStatus(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Accepted", 202)
+	})
+
+	if err := client.Request("/", nil); err == nil {
+		t.Errorf("Expected unexpected status code error")
+	}
+}

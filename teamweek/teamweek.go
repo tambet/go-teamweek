@@ -2,8 +2,8 @@ package teamweek
 
 import (
 	"encoding/json"
-	"fmt"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
 )
